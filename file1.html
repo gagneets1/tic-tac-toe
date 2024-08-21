@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.game-container {
+    width: 80%;
+    margin: 40px auto;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #d4d1d1;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cell:hover {
+    background-color: #f7f7f7;
+}
+
+.cell.X {
+    color: #2196f3;
+}
+
+.cell.O {
+    color: #ff9800;
+}
+
+.score-display {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.score-display p {
+    margin-bottom: 10px;
+}
+
+#reset-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#reset-button:hover {
+    background-color: #3e8e41;
+}
+    </style>
+</head>
+<body>
+    <h1 ALIGN="CENTER">TIC-TAC-TOE</h1>
+    <div class="game-container">
+        <div class="game-board">
+            <div class="row">
+                <div class="cell" id="cell-1"></div>
+                <div class="cell" id="cell-2"></div>
+                <div class="cell" id="cell-3"></div>
+            </div>
+            <div class="row">
+                <div class="cell" id="cell-4"></div>
+                <div class="cell" id="cell-5"></div>
+                <div class="cell" id="cell-6"></div>
+            </div>
+            <div class="row">
+                <div class="cell" id="cell-7"></div>
+                <div class="cell" id="cell-8"></div>
+                <div class="cell" id="cell-9"></div>
+            </div>
+        </div>
+        <div class="score-display">
+            <p>Player X: <span id="x-score">0</span></p>
+            <p>Player O: <span id="o-score">0</span></p>
+        </div>
+        <button id="reset-button">Reset Game</button>
+    </div>
+
+    <script>
+        console.log("JavaScript code started");
+
+        let xScore = 0;
+        let oScore = 0;
+        let currentPlayer = "X";
+        let gameStarted = true;
+        let cells = document.querySelectorAll(".cell");
+
+        console.log("Cells:", cells);
+
+        document.getElementById("reset-button").addEventListener("click", resetGame);
+
+        cells.forEach(cell => {
+            cell.addEventListener("click", makeMove);
+        });
+
+        function makeMove(event) {
+            console.log("Make move function called");
+            if (gameStarted) {
+                let cell = event.target;
+                if (cell.innerText === "") {
+                    cell.innerText = currentPlayer;
+                    cell.classList.add(currentPlayer);
+                    checkWin();
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";
+                }
+            }
+        }
+
+        function checkWin() {
+            console.log("Check win function called");
+            let winningCombinations = [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+                [1, 4, 7],
+                [2, 5, 8],
+                [3, 6, 9],
+                [1, 5, 9],
+                [3, 5, 7]
+            ];
+
+            for (let combination of winningCombinations) {
+                let cell1 = document.getElementById(`cell-${combination[0]}`);
+                let cell2 = document.getElementById(`cell-${combination[1]}`);
+                let cell3 = document.getElementById(`cell-${combination[2]}`);
+
+                if (cell1.innerText === cell2.innerText && cell2.innerText === cell3.innerText && cell1.innerText !== "") {
+                    gameStarted = false;
+                    if (cell1.innerText === "X") {
+                        xScore++;
+                        document.getElementById("x-score").innerText = xScore;
+                        alert("Player X wins!");
+                    } else {
+                        oScore++;
+                        document.getElementById("o-score").innerText = oScore;
+                        alert("Player O wins!");
+                    }
+                }
+            }
+        }
+
+        function resetGame() {
+            console.log("Reset game function called");
+            gameStarted = true;
+            currentPlayer = "X";
+            cells.forEach(cell => {
+                cell.innerText = "";
+                cell.classList.remove("X", "O");
+            });
+        }
+    </script>
+</body>
+</html>
